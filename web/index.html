@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LR35902 Explorer</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #101b35; color: #eaf2ff; font: 15px/1.5 system-ui, sans-serif; }
+      main { max-width: 1200px; margin: auto; padding: 32px; }
+      h1 { margin: 0; font-size: 28px; }
+      p { color: #9bb4d1; }
+      a { color: #60a5fa; }
+      .row { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
+      button, select, input { border: 1px solid #365a91; background: #192b52; color: #eaf2ff; border-radius: 6px; padding: 9px 12px; font: inherit; }
+      button { background: #3b82f6; cursor: pointer; }
+      select { min-width: 94px; }
+      input { width: 110px; }
+      .setting-row { display: grid; grid-template-columns: 48px 100px 110px 58px minmax(0, 1fr); gap: 8px; align-items: center; margin: 10px 0; }
+      .setting-row > * { min-width: 0; width: 100%; }
+      .setting-label { color: #9bb4d1; text-align: right; }
+      .set-values { color: #cfe1ff; font: 13px ui-monospace, monospace; overflow-wrap: anywhere; }
+      #setting-error { color: #fca5a5; }
+      body.loading main { visibility: hidden; }
+      #editor { width: 100%; }
+      #result { background: #14224a; padding: 16px; border-radius: 8px; margin-top: 18px; white-space: pre-wrap; font-family: monospace; color: #cfe1ff; }
+      .muted { color: #9bb4d1; }
+      @media (max-width: 650px) {
+        main { padding: 20px 14px; }
+        .setting-row { grid-template-columns: 42px minmax(80px, 1fr) minmax(88px, 1fr) 58px; }
+        .set-values { grid-column: 2 / -1; }
+      }
+    </style>
+  </head>
+  <body class="loading">
+    <main>
+      <h1>LR35902 Explorer</h1>
+      <p>Print out bytesize + cycle count for the GameBoy Color</p>
+      <div class="row">
+        <button id="run" type="button">Analyze</button>
+        <select id="keybindings" aria-label="Editor key bindings">
+          <option value="regular">Regular</option>
+          <option value="vim">Vim</option>
+          <option value="emacs">Emacs</option>
+        </select>
+        <button id="share" type="button">Share</button>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Reg</span>
+        <select id="register-name" aria-label="Register to set"></select>
+        <input id="register-value" type="text" inputmode="text" placeholder="0 or $FF" aria-label="Register value" />
+        <button id="register-set" type="button">Set</button>
+        <span class="set-values" id="register-values">Registers default to 0</span>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Flag</span>
+        <select id="flag-name" aria-label="Flag to set"></select>
+        <select id="flag-value" aria-label="Flag value">
+          <option value="false">false</option>
+          <option value="true">true</option>
+        </select>
+        <button id="flag-set" type="button">Set</button>
+        <span class="set-values" id="flag-values">Flags default to false</span>
+      </div>
+      <div id="setting-error" aria-live="polite"></div>
+      <div id="editor"></div>
+      <div id="result" aria-live="polite">Loading WebAssembly…</div>
+      <p class="muted">Opcode data: <a href="https://gbdev.io/gb-opcodes/Opcodes.json">gbdev opcode tables</a> · <a href="https://rgbds.gbdev.io/docs/v0.3.5/gbz80.7">RGBDS instruction reference</a></p>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
